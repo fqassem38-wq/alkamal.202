@@ -9,114 +9,74 @@
     <style>
         :root { 
             --p: #e94560; 
-            --bg: #0f3460; 
             --gold: #ffd700; 
             --mint: #1abc9c; 
             --dark-blue: #1a1a2e;
         }
 
         body { 
-            margin: 0; 
-            background: var(--dark-blue); 
-            color: white; 
-            font-family: 'Cairo', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            overflow: hidden; 
+            margin: 0; background: var(--dark-blue); color: white; 
+            font-family: 'Cairo', sans-serif; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            height: 100vh; overflow: hidden; 
         }
 
-        /* شاشة القفل */
         #lock-screen { 
-            position: fixed; 
-            inset: 0; 
-            background: var(--dark-blue); 
-            z-index: 2000; 
-            display: none; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            padding: 30px; 
+            position: fixed; inset: 0; background: var(--dark-blue); 
+            z-index: 2000; display: none; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; padding: 30px; 
         }
 
         .lock-card {
-            background: #16213e;
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid var(--p);
-            box-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+            background: #16213e; padding: 40px; border-radius: 20px;
+            border: 2px solid var(--p); box-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
         }
 
-        #game-content { display: block; text-align: center; width: 100%; max-width: 450px; }
+        #game-content { text-align: center; width: 100%; max-width: 450px; }
         
         .w-box { 
-            position: relative; 
-            width: 320px; 
-            height: 320px; 
-            margin: 20px auto; 
-            border: 8px solid #fff; 
-            border-radius: 50%; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5); 
+            position: relative; width: 320px; height: 320px; 
+            margin: 20px auto; border: 8px solid #fff; 
+            border-radius: 50%; box-shadow: 0 0 50px rgba(0,0,0,0.5); 
         }
         
         .arrow { 
-            position: absolute; 
-            top: -30px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 0; height: 0; 
-            border-left: 15px solid transparent; 
-            border-right: 15px solid transparent; 
-            border-top: 40px solid var(--p); 
-            z-index: 100; 
+            position: absolute; top: -35px; left: 50%; 
+            transform: translateX(-50%); width: 0; height: 0; 
+            border-left: 15px solid transparent; border-right: 15px solid transparent; 
+            border-top: 40px solid var(--p); z-index: 100; 
         }
 
-        canvas { width: 100%; height: 100%; border-radius: 50%; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); }
+        canvas { width: 100%; height: 100%; border-radius: 50%; transition: transform 5s cubic-bezier(0.2, 0, 0.1, 1); }
         
         .logo-center { 
             position: absolute; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 70px; height: 70px; 
-            background: white; border-radius: 50%; 
-            z-index: 110; border: 4px solid var(--mint); 
-            display: flex; align-items: center; justify-content: center; 
+            transform: translate(-50%, -50%); width: 70px; height: 70px; 
+            background: white; border-radius: 50%; z-index: 110; 
+            border: 4px solid var(--mint); display: flex; align-items: center; justify-content: center; 
         }
         
         button { 
-            padding: 12px 50px; 
-            background: linear-gradient(45deg, var(--p), #ff6b6b); 
+            padding: 12px 50px; background: linear-gradient(45deg, var(--p), #ff6b6b); 
             color: white; border: none; border-radius: 50px; 
-            font-size: 20px; font-weight: 900; cursor: pointer; 
-            transition: 0.3s;
+            font-size: 20px; font-weight: 900; cursor: pointer; transition: 0.3s;
         }
 
-        button:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 20px var(--p); }
         button:disabled { background: #555; cursor: not-allowed; }
-
         #st { margin-top: 20px; font-size: 22px; font-weight: bold; min-height: 30px; }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <div class="lock-card" id="lock-msg"></div>
-    </div>
+    <div id="lock-screen"><div class="lock-card" id="lock-msg"></div></div>
 
     <div id="game-content">
         <h2 style="color: var(--gold); margin-bottom: 5px;">✨ مكتبة الكمال ✨</h2>
-        <p style="margin-top: 0; opacity: 0.8;">سحب الهدايا المباشر</p>
-        
         <div class="w-box">
             <div class="arrow"></div>
-            <div class="logo-center">
-                <img src="logo/alkamal.png" alt="Logo" style="width:75%" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3342/3342137.png'">
-            </div>
+            <div class="logo-center"><img src="logo/alkamal.png" alt="Logo" style="width:75%" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3342/3342137.png'"></div>
             <canvas id="cv" width="600" height="600"></canvas>
         </div>
-
         <button id="btn" onclick="spin()">إبدأ السحب الآن</button>
         <div id="st"></div>
     </div>
@@ -125,7 +85,7 @@
     <audio id="winSnd" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
     <script>
-        // مصفوفة الجوائز مربوطة بالأرقام التي حددتها أنت
+        // مصفوفة الجوائز (الترتيب هنا هو ترتيب الرسم على العجلة)
         const prizes = [
             { n: "قسيمة 25,000", id: "100", isWin: true, c: "#e94560" },
             { n: "قسيمة 5,000", id: "200", isWin: true, c: "#1abc9c" },
@@ -140,21 +100,16 @@
         const codeId = urlParams.get('id');
 
         function init() {
-            const lock = document.getElementById('lock-screen');
-            const msg = document.getElementById('lock-msg');
-
             if (!codeId) {
-                msg.innerHTML = "<h2>⚠️ خطأ</h2><p>يرجى مسح الكود من الوصل الأصلي.</p>";
-                lock.style.display = "flex";
+                document.getElementById('lock-msg').innerHTML = "<h2>⚠️ خطأ</h2><p>يرجى مسح الكود من الوصل.</p>";
+                document.getElementById('lock-screen').style.display = "flex";
                 return;
             }
-
             if (localStorage.getItem('bk_used_' + codeId)) {
-                msg.innerHTML = `<h2>❌ عذراً</h2><p>هذا الكود (${codeId}) تم استخدامه مسبقاً.</p>`;
-                lock.style.display = "flex";
+                document.getElementById('lock-msg').innerHTML = `<h2>❌ عذراً</h2><p>الكود (${codeId}) مستخدم مسبقاً.</p>`;
+                document.getElementById('lock-screen').style.display = "flex";
                 return;
             }
-
             draw();
         }
 
@@ -169,8 +124,7 @@
                 ctx.arc(300, 300, 300, angle, angle + seg); ctx.fill();
                 ctx.save(); ctx.translate(300, 300); ctx.rotate(angle + seg / 2);
                 ctx.textAlign = "right"; ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 20px 'Cairo'"; 
-                ctx.fillText(prizes[i].n, 280, 10); ctx.restore();
+                ctx.font = "bold 20px 'Cairo'"; ctx.fillText(prizes[i].n, 280, 10); ctx.restore();
             }
         }
 
@@ -178,26 +132,27 @@
             const btn = document.getElementById('btn');
             btn.disabled = true;
 
-            // تحديد الفائز بناءً على الرقم المدخل في الرابط
+            // تحديد الجائزة بناء على ID
             let winIdx = prizes.findIndex(p => p.id === codeId);
-            
-            // إذا كان الرقم غير موجود في القائمة، اجعله يخسر (حظ أوفر)
-            if (winIdx === -1) {
-                winIdx = prizes.findIndex(p => p.id === "default");
-            }
+            if (winIdx === -1) winIdx = prizes.findIndex(p => p.id === "default");
 
             const degPerSeg = 360 / prizes.length;
-            // 3600 (10 دورات) + 270 (لتعديل زاوية السهم للأعلى) - موقع الجائزة
-            const totalSpin = 3600 + (270 - (winIdx * degPerSeg + degPerSeg/2));
+            
+            // الحساب الصحيح:
+            // 1. العجلة ترسم القطاع الأول (0) عند الساعة 3.
+            // 2. السهم عند الساعة 12 (الزاوية 270).
+            // 3. لإحضار القطاع رقم X إلى السهم، نحتاج لتدوير العجلة بزاوية تجعله عند 270.
+            const targetAngle = (winIdx * degPerSeg) + (degPerSeg / 2);
+            const rotationNeeded = 270 - targetAngle;
+            const totalSpin = 3600 + rotationNeeded; // 3600 هي 10 دورات كاملة للتشويق
 
-            document.getElementById('cv').style.transform = `rotate(${totalSpin}deg)`;
+            const canvas = document.getElementById('cv');
+            canvas.style.transform = `rotate(${totalSpin}deg)`;
             document.getElementById('spinSnd').play().catch(()=>{});
 
             setTimeout(() => {
                 const p = prizes[winIdx];
                 const st = document.getElementById('st');
-                
-                // حفظ الحالة لمنع إعادة التدوير
                 localStorage.setItem('bk_used_' + codeId, Date.now());
 
                 if (p.isWin) {
@@ -209,7 +164,7 @@
                 }
                 
                 setTimeout(() => {
-                    alert(p.isWin ? "سجل جائزتك: " + p.n : "شكراً لمشاركتك!");
+                    alert(p.isWin ? "جائزتك: " + p.n : "شكراً لمشاركتك!");
                     location.reload(); 
                 }, 4000);
             }, 5000);
