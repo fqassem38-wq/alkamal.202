@@ -3,66 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة الكمال - نظام الباركود المحمي</title>
+    <title>مكتبة الكمال - سحب الهدايا</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --p: #e94560; --bg: #1a1a2e; --gold: #ffd700; --mint: #1abc9c; }
-        body { margin: 0; background: radial-gradient(circle, #242933 0%, #1a1a2e 100%); color: white; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        
-        /* شاشة منع الدخول */
-        #lock-screen { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        
+        :root { 
+            --p: #e94560; 
+            --bg: #0f3460; 
+            --gold: #ffd700; 
+            --mint: #1abc9c; 
+            --dark-blue: #1a1a2e;
+        }
+
+        body { 
+            margin: 0; 
+            background: var(--dark-blue); 
+            color: white; 
+            font-family: 'Cairo', sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+
+        /* شاشة القفل المحسنة */
+        #lock-screen { 
+            position: fixed; 
+            inset: 0; 
+            background: var(--dark-blue); 
+            z-index: 2000; 
+            display: none; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            padding: 30px; 
+        }
+
+        .lock-card {
+            background: #16213e;
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid var(--p);
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+        }
+
         #game-content { display: block; text-align: center; width: 100%; max-width: 450px; }
-        .w-box { position: relative; width: 360px; height: 360px; margin: 20px auto; border: 10px solid #ffffff; border-radius: 50%; box-shadow: 0 0 40px rgba(0,0,0,0.6); background: #fff; }
-        .arrow { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 45px solid var(--p); z-index: 100; filter: drop-shadow(0 5px 10px #000); }
-        canvas { width: 100%; height: 100%; border-radius: 50%; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); }
-        .logo-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95px; height: 95px; background: white; border-radius: 50%; z-index: 110; border: 5px solid #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 0 3px var(--mint); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .logo-center img { width: 85%; height: 85%; object-fit: contain; }
-        button { padding: 15px 60px; background: linear-gradient(45deg, var(--p), #ff6b6b); color: white; border: none; border-radius: 50px; font-family: 'Cairo', sans-serif; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 15px rgba(233, 69, 96, 0.4); }
-        button:disabled { background: #444; opacity: 0.7; }
-        #st { margin-top: 20px; font-size: 24px; font-weight: 900; min-height: 40px; }
         
-        .gift { position: absolute; font-size: 40px; opacity: 0.4; animation: float 10s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        /* تصميم العجلة */
+        .w-box { 
+            position: relative; 
+            width: 320px; 
+            height: 320px; 
+            margin: 20px auto; 
+            border: 8px solid #fff; 
+            border-radius: 50%; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); 
+        }
+        
+        .arrow { 
+            position: absolute; 
+            top: -30px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 0; height: 0; 
+            border-left: 15px solid transparent; 
+            border-right: 15px solid transparent; 
+            border-top: 40px solid var(--p); 
+            z-index: 100; 
+        }
+
+        canvas { width: 100%; height: 100%; border-radius: 50%; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); }
+        
+        .logo-center { 
+            position: absolute; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 80px; height: 80px; 
+            background: white; border-radius: 50%; 
+            z-index: 110; border: 4px solid var(--mint); 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        
+        button { 
+            padding: 12px 50px; 
+            background: linear-gradient(45deg, var(--p), #ff6b6b); 
+            color: white; border: none; border-radius: 50px; 
+            font-size: 20px; font-weight: 900; cursor: pointer; 
+            transition: 0.3s;
+        }
+
+        button:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 20px var(--p); }
+        button:disabled { background: #555; cursor: not-allowed; }
+
+        #st { margin-top: 20px; font-size: 22px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
-        <div id="lock-msg"></div>
+        <div class="lock-card" id="lock-msg"></div>
     </div>
 
     <div id="game-content">
-        <div class="gift" style="top:10%; left:10%">🎁</div>
-        <div class="gift" style="top:70%; left:85%">🎁</div>
-        <div id="game">
-            <h2 style="margin-bottom: 5px; color: var(--gold); font-size: 28px; font-weight: 900;">✨ مكتبة الكمال ✨</h2>
-            <div class="w-box">
-                <div class="arrow"></div>
-                <div class="logo-center"><img src="logo/alkamal.png" alt="Logo"></div>
-                <canvas id="cv" width="600" height="600"></canvas>
+        <h2 style="color: var(--gold);">✨ مكتبة الكمال ✨</h2>
+        <p style="margin-top: -10px; opacity: 0.8;">سحب الهدايا المباشر</p>
+        
+        <div class="w-box">
+            <div class="arrow"></div>
+            <div class="logo-center">
+                <img src="logo/alkamal.png" alt="Logo" style="width:70%">
             </div>
-            <button id="btn" onclick="spin()">إبدأ السحب</button>
-            <div id="st"></div>
+            <canvas id="cv" width="600" height="600"></canvas>
         </div>
+
+        <button id="btn" onclick="spin()">إبدأ السحب الآن</button>
+        <div id="st"></div>
     </div>
 
     <audio id="spinSnd" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
     <audio id="winSnd" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
-    <audio id="lossSnd" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
     <script>
         const prizes = [
             { n: "قسيمة 25,000", w: 1, isWin: true },
-            { n: "حظ أوفر", w: 81, isWin: false },
-            { n: "قسيمة 5,000", w: 1, isWin: true },
-            { n: "كوب هدية", w: 1, isWin: true },
-            { n: "سيت أقلام", w: 3, isWin: true },
-            { n: "دفتر", w: 3, isWin: true },
+            { n: "حظ أوفر", w: 70, isWin: false },
+            { n: "قسيمة 5,000", w: 2, isWin: true },
+            { n: "كوب هدية", w: 2, isWin: true },
+            { n: "سيت أقلام", w: 5, isWin: true },
+            { n: "دفتر", w: 10, isWin: true },
             { n: "ممحاة", w: 10, isWin: true }
         ];
-        const clr = ["#1abc9c", "#f39c12", "#9b59b6", "#3498db", "#d35400", "#8e44ad", "#27ae60"];
+        const clr = ["#e94560", "#1a1a2e", "#1abc9c", "#f39c12", "#9b59b6", "#3498db", "#27ae60"];
         
         const urlParams = new URLSearchParams(window.location.search);
         const codeId = urlParams.get('id');
@@ -70,25 +143,17 @@
         function init() {
             const lock = document.getElementById('lock-screen');
             const msg = document.getElementById('lock-msg');
-            const codeNum = parseInt(codeId);
 
-            // 1. فحص وجود كود
+            // 1. التحقق من وجود ID
             if (!codeId) {
-                msg.innerHTML = "<h1>⚠️ عذراً</h1><p>الدخول مسموح فقط عبر مسح باركود المكتبة.</p>";
+                msg.innerHTML = "<h2>⚠️ خطأ في الدخول</h2><p>يرجى مسح الكود من الوصل الأصلي.</p>";
                 lock.style.display = "flex";
                 return;
             }
 
-            // 2. فحص نطاق الكود (100-200)
-            if (isNaN(codeNum) || codeNum < 100 || codeNum > 200) {
-                msg.innerHTML = "<h1>⚠️ كود غير صالح</h1><p>عذراً، هذا الباركود غير مسجل في نظام القرعة الحالي.</p>";
-                lock.style.display = "flex";
-                return;
-            }
-
-            // 3. فحص الاستخدام المسبق
-            if (localStorage.getItem('used_barcode_' + codeId)) {
-                msg.innerHTML = `<h1>❌ كود مستخدم</h1><p>عذراً، لقد استخدمت الكود (${codeId}) مسبقاً.<br>محاولة واحدة فقط لكل عميل.</p>`;
+            // 2. التحقق من التكرار (استخدام معرف المتصفح + الكود)
+            if (localStorage.getItem('bk_used_' + codeId)) {
+                msg.innerHTML = `<h2>❌ محاولة مكررة</h2><p>عذراً، هذا الكود (${codeId}) تم استخدامه سابقاً على هذا الجهاز.</p>`;
                 lock.style.display = "flex";
                 return;
             }
@@ -105,11 +170,10 @@
                 const angle = i * seg;
                 ctx.beginPath(); ctx.fillStyle = clr[i]; ctx.moveTo(300, 300);
                 ctx.arc(300, 300, 300, angle, angle + seg); ctx.fill();
-                ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 4; ctx.stroke();
                 ctx.save(); ctx.translate(300, 300); ctx.rotate(angle + seg / 2);
                 ctx.textAlign = "right"; ctx.fillStyle = "#ffffff";
-                ctx.font = "900 24px 'Cairo'"; 
-                ctx.fillText(prizes[i].n, 270, 10); ctx.restore();
+                ctx.font = "bold 22px 'Cairo'"; 
+                ctx.fillText(prizes[i].n, 280, 10); ctx.restore();
             }
         }
 
@@ -117,8 +181,8 @@
             const btn = document.getElementById('btn');
             btn.disabled = true;
 
-            // قفل الكود فوراً
-            localStorage.setItem('used_barcode_' + codeId, 'true');
+            // تسجيل الاستخدام فوراً لمنع التلاعب بتحديث الصفحة
+            localStorage.setItem('bk_used_' + codeId, Date.now());
 
             let pool = [];
             prizes.forEach((p, idx) => { for(let i=0; i<p.w; i++) pool.push(idx); });
@@ -133,17 +197,18 @@
                 const p = prizes[winIdx];
                 const st = document.getElementById('st');
                 if (p.isWin) {
-                    st.innerHTML = `<span style="color:#ffd700">🎉 مبروك! فزت بـ ${p.n}</span>`;
+                    st.innerHTML = `<span style="color:var(--gold)">🎊 مبروك! فزت بـ ${p.n} 🎊</span>`;
                     document.getElementById('winSnd').play().catch(()=>{});
                     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
                 } else {
-                    st.innerHTML = `<span style="color:#abb2bf">للاسف ماربحت شي </span>`;
-                    document.getElementById('lossSnd').play().catch(()=>{});
+                    st.innerHTML = `<span style="color:#eee">حظ أوفر في المرة القادمة</span>`;
                 }
                 
+                // منع إعادة اللعب نهائياً
                 setTimeout(() => {
-                    alert(p.isWin ? "تهانينا! فزت بـ: " + p.n : "حظاً أوفر المرة القادمة!");
-                }, 500);
+                    alert(p.isWin ? "تم تسجيل جائزتك: " + p.n : "شكراً لمشاركتك!");
+                    location.reload(); // سيقوم النظام بقفله تلقائياً عند التحديث
+                }, 2000);
             }, 5000);
         }
 
