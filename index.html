@@ -28,7 +28,7 @@
             overflow: hidden; 
         }
 
-        /* شاشة القفل المحسنة */
+        /* شاشة القفل */
         #lock-screen { 
             position: fixed; 
             inset: 0; 
@@ -52,7 +52,6 @@
 
         #game-content { display: block; text-align: center; width: 100%; max-width: 450px; }
         
-        /* تصميم العجلة */
         .w-box { 
             position: relative; 
             width: 320px; 
@@ -80,7 +79,7 @@
         .logo-center { 
             position: absolute; top: 50%; left: 50%; 
             transform: translate(-50%, -50%); 
-            width: 80px; height: 80px; 
+            width: 70px; height: 70px; 
             background: white; border-radius: 50%; 
             z-index: 110; border: 4px solid var(--mint); 
             display: flex; align-items: center; justify-content: center; 
@@ -97,7 +96,7 @@
         button:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 20px var(--p); }
         button:disabled { background: #555; cursor: not-allowed; }
 
-        #st { margin-top: 20px; font-size: 22px; font-weight: bold; }
+        #st { margin-top: 20px; font-size: 22px; font-weight: bold; min-height: 30px; }
     </style>
 </head>
 <body>
@@ -107,13 +106,13 @@
     </div>
 
     <div id="game-content">
-        <h2 style="color: var(--gold);">✨ مكتبة الكمال ✨</h2>
-        <p style="margin-top: -10px; opacity: 0.8;">سحب الهدايا المباشر</p>
+        <h2 style="color: var(--gold); margin-bottom: 5px;">✨ مكتبة الكمال ✨</h2>
+        <p style="margin-top: 0; opacity: 0.8;">سحب الهدايا المباشر</p>
         
         <div class="w-box">
             <div class="arrow"></div>
             <div class="logo-center">
-                <img src="logo/alkamal.png" alt="Logo" style="width:70%">
+                <img src="logo/alkamal.png" alt="Logo" style="width:75%" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3342/3342137.png'">
             </div>
             <canvas id="cv" width="600" height="600"></canvas>
         </div>
@@ -126,16 +125,16 @@
     <audio id="winSnd" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
     <script>
+        // مصفوفة الجوائز مربوطة بالأرقام التي حددتها أنت
         const prizes = [
-            { n: "قسيمة 25,000", w: 1, isWin: true },
-            { n: "حظ أوفر", w: 70, isWin: false },
-            { n: "قسيمة 5,000", w: 2, isWin: true },
-            { n: "كوب هدية", w: 2, isWin: true },
-            { n: "سيت أقلام", w: 5, isWin: true },
-            { n: "دفتر", w: 10, isWin: true },
-            { n: "ممحاة", w: 10, isWin: true }
+            { n: "قسيمة 25,000", id: "100", isWin: true, c: "#e94560" },
+            { n: "قسيمة 5,000", id: "200", isWin: true, c: "#1abc9c" },
+            { n: "كوب هدية", id: "110", isWin: true, c: "#f39c12" },
+            { n: "سيت قلم جاف", id: "120", isWin: true, c: "#9b59b6" },
+            { n: "ممحاة", id: "130", isWin: true, c: "#3498db" },
+            { n: "دفتر", id: "140", isWin: true, c: "#27ae60" },
+            { n: "حظ أوفر", id: "default", isWin: false, c: "#1a1a2e" }
         ];
-        const clr = ["#e94560", "#1a1a2e", "#1abc9c", "#f39c12", "#9b59b6", "#3498db", "#27ae60"];
         
         const urlParams = new URLSearchParams(window.location.search);
         const codeId = urlParams.get('id');
@@ -144,16 +143,14 @@
             const lock = document.getElementById('lock-screen');
             const msg = document.getElementById('lock-msg');
 
-            // 1. التحقق من وجود ID
             if (!codeId) {
-                msg.innerHTML = "<h2>⚠️ خطأ في الدخول</h2><p>يرجى مسح الكود من الوصل الأصلي.</p>";
+                msg.innerHTML = "<h2>⚠️ خطأ</h2><p>يرجى مسح الكود من الوصل الأصلي.</p>";
                 lock.style.display = "flex";
                 return;
             }
 
-            // 2. التحقق من التكرار (استخدام معرف المتصفح + الكود)
             if (localStorage.getItem('bk_used_' + codeId)) {
-                msg.innerHTML = `<h2>❌ محاولة مكررة</h2><p>عذراً، هذا الكود (${codeId}) تم استخدامه سابقاً على هذا الجهاز.</p>`;
+                msg.innerHTML = `<h2>❌ عذراً</h2><p>هذا الكود (${codeId}) تم استخدامه مسبقاً.</p>`;
                 lock.style.display = "flex";
                 return;
             }
@@ -168,11 +165,11 @@
             ctx.clearRect(0,0,600,600);
             for (let i = 0; i < prizes.length; i++) {
                 const angle = i * seg;
-                ctx.beginPath(); ctx.fillStyle = clr[i]; ctx.moveTo(300, 300);
+                ctx.beginPath(); ctx.fillStyle = prizes[i].c; ctx.moveTo(300, 300);
                 ctx.arc(300, 300, 300, angle, angle + seg); ctx.fill();
                 ctx.save(); ctx.translate(300, 300); ctx.rotate(angle + seg / 2);
                 ctx.textAlign = "right"; ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 22px 'Cairo'"; 
+                ctx.font = "bold 20px 'Cairo'"; 
                 ctx.fillText(prizes[i].n, 280, 10); ctx.restore();
             }
         }
@@ -181,13 +178,16 @@
             const btn = document.getElementById('btn');
             btn.disabled = true;
 
-            // تسجيل الاستخدام فوراً لمنع التلاعب بتحديث الصفحة
-            localStorage.setItem('bk_used_' + codeId, Date.now());
+            // تحديد الفائز بناءً على الرقم المدخل في الرابط
+            let winIdx = prizes.findIndex(p => p.id === codeId);
+            
+            // إذا كان الرقم غير موجود في القائمة، اجعله يخسر (حظ أوفر)
+            if (winIdx === -1) {
+                winIdx = prizes.findIndex(p => p.id === "default");
+            }
 
-            let pool = [];
-            prizes.forEach((p, idx) => { for(let i=0; i<p.w; i++) pool.push(idx); });
-            const winIdx = pool[Math.floor(Math.random() * pool.length)];
             const degPerSeg = 360 / prizes.length;
+            // 3600 (10 دورات) + 270 (لتعديل زاوية السهم للأعلى) - موقع الجائزة
             const totalSpin = 3600 + (270 - (winIdx * degPerSeg + degPerSeg/2));
 
             document.getElementById('cv').style.transform = `rotate(${totalSpin}deg)`;
@@ -196,19 +196,22 @@
             setTimeout(() => {
                 const p = prizes[winIdx];
                 const st = document.getElementById('st');
+                
+                // حفظ الحالة لمنع إعادة التدوير
+                localStorage.setItem('bk_used_' + codeId, Date.now());
+
                 if (p.isWin) {
                     st.innerHTML = `<span style="color:var(--gold)">🎊 مبروك! فزت بـ ${p.n} 🎊</span>`;
                     document.getElementById('winSnd').play().catch(()=>{});
                     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
                 } else {
-                    st.innerHTML = `<span style="color:#eee">حظ أوفر في المرة القادمة</span>`;
+                    st.innerHTML = `<span style="color:#eee">حظ أوفر المرة القادمة</span>`;
                 }
                 
-                // منع إعادة اللعب نهائياً
                 setTimeout(() => {
-                    alert(p.isWin ? "تم تسجيل جائزتك: " + p.n : "شكراً لمشاركتك!");
-                    location.reload(); // سيقوم النظام بقفله تلقائياً عند التحديث
-                }, 2000);
+                    alert(p.isWin ? "سجل جائزتك: " + p.n : "شكراً لمشاركتك!");
+                    location.reload(); 
+                }, 4000);
             }, 5000);
         }
 
