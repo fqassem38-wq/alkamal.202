@@ -9,21 +9,17 @@
     <style>
         :root { --p: #e94560; --gold: #ffd700; --mint: #1abc9c; --dark-blue: #1a1a2e; }
         body { margin: 0; background: var(--dark-blue); color: white; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        
         #lock-screen { position: fixed; inset: 0; background: var(--dark-blue); z-index: 2000; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .lock-card { background: #16213e; padding: 40px; border-radius: 20px; border: 2px solid var(--p); box-shadow: 0 0 30px rgba(233, 69, 96, 0.3); max-width: 320px; }
-        
+        .lock-card { background: #16213e; padding: 40px; border-radius: 20px; border: 2px solid var(--p); box-shadow: 0 0 30px rgba(233,69,96,0.3); max-width: 320px; }
         #game-content { text-align: center; width: 100%; max-width: 450px; display: none; }
-        .w-box { position: relative; width: 320px; height: 320px; margin: 25px auto; border: 10px solid #fff; border-radius: 50%; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .arrow { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 45px solid var(--p); z-index: 100; }
+        .w-box { position: relative; width: 300px; height: 300px; margin: 25px auto; border: 8px solid #fff; border-radius: 50%; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .arrow { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 40px solid var(--p); z-index: 100; }
         canvas { width: 100%; height: 100%; border-radius: 50%; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); }
-        .logo-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: white; border-radius: 50%; z-index: 110; border: 4px solid var(--mint); display: flex; align-items: center; justify-content: center; font-size: 30px; }
-        
-        button { padding: 15px 50px; background: linear-gradient(45deg, var(--p), #ff6b6b); color: white; border: none; border-radius: 50px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(233, 69, 96, 0.4); }
-        button:disabled { background: #444; cursor: not-allowed; opacity: 0.7; }
-        
-        #st { margin-top: 25px; font-size: 24px; font-weight: bold; min-height: 50px; }
-        .loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--p); border-radius: 50%; width: 45px; height: 45px; animation: spin-load 1s linear infinite; margin: 20px auto; }
+        .logo-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: white; border-radius: 50%; z-index: 110; border: 4px solid var(--mint); display: flex; align-items: center; justify-content: center; font-size: 25px; }
+        button { padding: 15px 50px; background: linear-gradient(45deg, var(--p), #ff6b6b); color: white; border: none; border-radius: 50px; font-size: 20px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(233, 69, 96, 0.4); }
+        button:disabled { background: #444; cursor: not-allowed; }
+        #st { margin-top: 20px; font-size: 22px; font-weight: bold; min-height: 40px; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--p); border-radius: 50%; width: 40px; height: 40px; animation: spin-load 1s linear infinite; margin: 20px auto; }
         @keyframes spin-load { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -37,15 +33,13 @@
 </div>
 
 <div id="game-content">
-    <h1 style="color:var(--gold); margin-bottom: 5px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">✨ مكتبة الكمال ✨</h1>
+    <h1 style="color:var(--gold); margin-bottom: 5px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3);">✨ مكتبة الكمال ✨</h1>
     <p style="color:var(--mint); margin-top:0;">سحب الهدايا المباشر</p>
-    
     <div class="w-box">
         <div class="arrow"></div>
         <div class="logo-center">🎁</div>
         <canvas id="cv" width="600" height="600"></canvas>
     </div>
-    
     <button id="btn" onclick="spin()">إضغط للسحب الآن</button>
     <div id="st"></div>
 </div>
@@ -54,10 +48,8 @@
 <audio id="winSnd" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
 <script>
-/** * إعدادات هامة: 
- * استبدل الرابط أدناه برابط السكربت (Web App URL) الخاص بك
- */
-const SCRIPT_URL = "ضع_رابط_السكربت_الخاص_بك_هنا_ينتهي_بـ_exec"; 
+// ضع رابط الـ Web App الخاص بك هنا بدقة (يجب أن ينتهي بـ exec)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWY...رابطك_هنا.../exec"; 
 
 const prizes = [
     { n: "قسيمة 25,000", id: "100", isWin: true, c: "#e94560" },
@@ -75,24 +67,20 @@ async function init() {
     const urlParams = new URLSearchParams(window.location.search);
     let codeId = urlParams.get('id');
 
-    // محاولة جلب المعرف يدوياً إذا فشل المتصفح
-    if (!codeId && window.location.href.includes('id=')) {
-        codeId = window.location.href.split('id=')[1].split('&')[0];
-    }
-
     if (!codeId) {
-        showMsg("<h2>⚠️ تنبيه</h2><p>يرجى مسح الكود من الوصل الرسمي لمكتبة الكمال.</p>");
+        showMsg("<h2>⚠️ تنبيه</h2><p>يرجى مسح الكود من الوصل الرسمي.</p>");
         return;
     }
 
     try {
+        // الاتصال بالسيرفر
         const response = await fetch(`${SCRIPT_URL}?id=${codeId}&check=true`);
         const data = await response.json();
 
         if (data.status === "used") {
-            showMsg("<h2>❌ نعتذر</h2><p>هذا الكود تم استخدامه مسبقاً.</p>");
+            showMsg("<h2>❌ نعتذر</h2><p>تم استخدام هذا الكود مسبقاً.</p>");
         } else if (data.status === "notfound") {
-            showMsg("<h2>❌ خطأ</h2><p>هذا الكود غير مسجل في نظامنا.</p>");
+            showMsg("<h2>❌ خطأ</h2><p>الكود غير مسجل في النظام.</p>");
         } else if (data.status === "ok") {
             serverResult = data;
             document.getElementById('lock-screen').style.display = "none";
@@ -100,63 +88,43 @@ async function init() {
             drawWheel();
         }
     } catch (error) {
-        showMsg("<h2>⚠️ خطأ اتصال</h2><p>تأكد من إعدادات النشر في السكربت (Anyone).</p>");
+        showMsg("<h2>⚠️ عطل فني</h2><p>تأكد من ضبط النشر لـ 'Anyone' وعمل New Version.</p>");
     }
 }
 
 function showMsg(html) { document.getElementById('lock-msg').innerHTML = html; }
 
 function drawWheel() {
-    const cv = document.getElementById('cv');
-    const ctx = cv.getContext('2d');
+    const cv = document.getElementById('cv'); const ctx = cv.getContext('2d');
     const seg = (Math.PI * 2) / prizes.length;
-    
-    ctx.clearRect(0, 0, 600, 600);
     for (let i = 0; i < prizes.length; i++) {
         const angle = i * seg;
-        ctx.beginPath();
-        ctx.fillStyle = prizes[i].c;
-        ctx.moveTo(300, 300);
-        ctx.arc(300, 300, 295, angle, angle + seg);
-        ctx.fill();
-        
-        ctx.save();
-        ctx.translate(300, 300);
-        ctx.rotate(angle + seg / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 22px Cairo";
-        ctx.fillText(prizes[i].n, 260, 10);
-        ctx.restore();
+        ctx.beginPath(); ctx.fillStyle = prizes[i].c; ctx.moveTo(300, 300);
+        ctx.arc(300, 300, 295, angle, angle + seg); ctx.fill();
+        ctx.save(); ctx.translate(300, 300); ctx.rotate(angle + seg / 2);
+        ctx.textAlign = "right"; ctx.fillStyle = "#fff"; ctx.font = "bold 22px Cairo";
+        ctx.fillText(prizes[i].n, 260, 10); ctx.restore();
     }
 }
 
 function spin() {
-    const btn = document.getElementById('btn');
-    btn.disabled = true;
-    
+    const btn = document.getElementById('btn'); btn.disabled = true;
     let winIdx = prizes.findIndex(p => p.id === serverResult.prizeId);
     if (winIdx === -1) winIdx = prizes.length - 1;
-
     const degPerSeg = 360 / prizes.length;
     const finalRotation = 3600 + (270 - ((winIdx * degPerSeg) + (degPerSeg / 2)));
-    
     document.getElementById('cv').style.transform = `rotate(${finalRotation}deg)`;
     document.getElementById('spinSnd').play().catch(()=>{});
-
     setTimeout(() => {
         const p = prizes[winIdx];
         const st = document.getElementById('st');
         if (p.isWin) {
             st.innerHTML = `<span style="color:var(--gold)">🎊 مبروك ربحت: ${p.n} 🎊</span>`;
             document.getElementById('winSnd').play().catch(()=>{});
-            confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-        } else {
-            st.innerHTML = `<span style="color:#ccc">حظ أوفر في المرة القادمة</span>`;
-        }
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        } else { st.innerHTML = `<span style="color:#ccc">حظ أوفر المرة القادمة</span>`; }
     }, 5000);
 }
-
 window.onload = init;
 </script>
 </body>
